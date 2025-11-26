@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Futureบ้านเรา – Fact Checklist (Ultra Accuracy – GDELT)</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+
+<style>
+/* ---------------- ROOT THEME ---------------- */
+:root {
+    --bg: #0f1826;
+    --fg: #eaf1ff;
+    --accent: #4da3ff;
+    --card: #162133;
+    --border: #2a3b52;
+
+    --good: #40ff9c;
+    --warn: #ffe26b;
+    --bad:  #ff6b6b;
+
+    --red: #ff4d6d;
+    --yellow: #ffe26b;
+    --green: #40ff9c;
+
+    --smooth: cubic-bezier(.25,.8,.25,1);
+}
+
+/* BODY */
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: "Prompt", sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px 100px;
+}
+
+/* HEADER */
+.logo {
+    width: 240px;
+    margin-bottom: 16px;
+    filter: drop-shadow(0 4px 10px rgba(0,0,0,.4));
+}
+
+.title {
+    font-size: 2.8rem;
+    font-weight: 450;
+    text-align: center;
+    background: linear-gradient(90deg, #4da3ff, #91f2ff, #4da3ff);
+    -webkit-background-clip: text;
+    color: transparent;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    font-size: 1.1rem;
+    color: #c7d6e9;
+    text-align: center;
+    max-width: 770px;
+    line-height: 1.65;
+    margin-bottom: 42px;
+}
+
+/* INPUT ZONE */
+.shell {
+    width: 100%;
+    max-width: 920px;
+}
+
+.card {
+    background: radial-gradient(circle at top left, #1b2942, #0f1826 60%);
+    border-radius: 26px;
+    border: 1px solid rgba(103, 140, 188, .45);
+    box-shadow:
+        0 24px 80px rgba(0, 0, 0, .75),
+        0 0 0 1px rgba(255,255,255,.02);
+    padding: 26px 26px 26px;
+    backdrop-filter: blur(20px);
+    position: relative;
+    overflow: hidden;
+}
+
+.card::before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    background:
+        radial-gradient(circle at 10% 0%, rgba(77,163,255,.18), transparent 45%),
+        radial-gradient(circle at 90% 100%, rgba(145,242,255,.18), transparent 45%);
+    opacity: .9;
+    pointer-events: none;
+}
+
+.card-inner {
+    position: relative;
+    z-index: 1;
+}
+
+/* Input Section */
+.input-label {
+    font-size: .9rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #9ab5dd;
+    margin-bottom: 10px;
+}
+
+.input-label span {
+    color: #ffe26b;
+}
+
+.input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(7, 14, 26, .7);
+    border-radius: 16px;
+    border: 1px solid rgba(106, 138, 186, .7);
+    padding: 14px 18px;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,.5);
+    transition: border .2s var(--smooth);
+}
+
+.input-wrapper:focus-within {
+    border-color: var(--accent);
+}
+
+input {
+    flex: 1;
+    padding: 18px 0;
+    font-size: 1.15rem;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--fg);
+}
+
+.clear-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #243347;
+    border: none;
+    cursor: pointer;
+    color: var(--fg);
+    font-size: 20px;
+}
+
+.check-btn {
+    width: 100%;
+    padding: 16px;
+    background: var(--accent);
+    color: #001526;
+    border-radius: 14px;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-top: 18px;
+    box-shadow:
+        0 14px 40px rgba(41, 146, 255, .4),
+        0 0 0 1px rgba(255,255,255,.04);
+    transition: transform .12s var(--smooth), box-shadow .15s var(--smooth), filter .15s var(--smooth);
+}
+
+.check-btn:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.05);
+}
+
+.check-btn:active {
+    transform: translateY(1px) scale(.99);
+    box-shadow:
+        0 6px 20px rgba(26, 120, 220, .45),
+        0 0 0 1px rgba(255,255,255,.04);
+}
+
+/* PROGRESS */
+.progress-box {
+    display: none;
+    margin-top: 22px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px dashed rgba(121, 151, 199, .7);
+    background: rgba(6, 12, 24, .75);
+    font-size: .9rem;
+    color: #c0d0ea;
+    gap: 10px;
+    align-items: center;
+}
+
+.spin {
+    width: 16px;
+    height: 16px;
+    border-radius: 999px;
+    border: 2px solid rgba(121,151,199,.2);
+    border-top-color: var(--accent);
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* RESULT */
+.result-wrapper {
+    margin-top: 26px;
+}
+
+.result-card {
+    background: rgba(7, 14, 26, .9);
+    border-radius: 18px;
+    border: 1px solid rgba(103, 140, 188, .6);
+    padding: 18px 18px 20px;
+    box-shadow:
+        0 14px 40px rgba(0,0,0,.85),
+        0 0 0 1px rgba(255,255,255,.02);
+}
+
+/* Badge */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: .85rem;
+    padding: 6px 10px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+}
+
+.badge.good {
+    background: rgba(64,255,156,.08);
+    color: var(--good);
+    border: 1px solid rgba(64,255,156,.4);
+}
+
+.badge.warn {
+    background: rgba(255,226,107,.08);
+    color: var(--warn);
+    border: 1px solid rgba(255,226,107,.4);
+}
+
+.badge.bad {
+    background: rgba(255,107,107,.08);
+    color: var(--bad);
+    border: 1px solid rgba(255,107,107,.4);
+}
+
+.detail {
+    font-size: 1rem;
+    color: #d5e3ff;
+    line-height: 1.7;
+    margin-bottom: 12px;
+}
+
+/* Sections */
+.report-section {
+    margin-top: 14px;
+}
+
+.report-title {
+    font-size: .9rem;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: #8ea5cf;
+    margin-bottom: 4px;
+}
+
+.report-content {
+    font-size: .95rem;
+    color: #d5e3ff;
+    line-height: 1.65;
+}
+
+/* Score Bar */
+.score-box {
+    margin-top: 24px;
+    padding-top: 14px;
+    border-top: 1px dashed #31445c;
+}
+
+.score-label {
+    font-size: .9rem;
+    color: #c2d3f3;
+    margin-bottom: 8px;
+}
+
+.score-bar {
+    height: 14px;
+    width: 100%;
+    border-radius: 999px;
+    background: #1b2640;
+    overflow: hidden;
+    box-shadow: inset 0 0 8px rgba(0,0,0,.9);
+}
+
+.score-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #4da3ff, #40ff9c);
+    box-shadow:
+        0 0 16px rgba(77,163,255,.7),
+        0 0 24px rgba(64,255,156,.6);
+    transition: width .8s var(--smooth);
+}
+
+/* Heatmap */
+.heatmap {
+    display: grid;
+    grid-template-columns: minmax(0,1fr);
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.heat-item {
+    font-size: .9rem;
+}
+
+.heat-label {
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.heat-bar {
+    width: 100%;
+    height: 10px;
+    border-radius: 6px;
+    background: #223345;
+    overflow: hidden;
+}
+
+.heat-fill {
+    height: 100%;
+    width: 0%;
+    transition: width .8s var(--smooth);
+}
+
+/* FOOTNOTE */
+.footer-note {
+    margin-top: 18px;
+    font-size: .8rem;
+    color: #7f91b4;
+    max-width: 920px;
+    line-height: 1.6;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    body {
+        padding: 24px 16px 60px;
+    }
+
+    .title {
+        font-size: 2.1rem;
+    }
+
+    .card {
+        padding: 18px 16px 18px;
+        border-radius: 22px;
+    }
+
+    .subtitle {
+        font-size: .95rem;
+    }
+}
+</style>
+</head>
+<body>
+
+<img class="logo" src="logo.png" alt="Futureบ้านเรา Logo">
+
+<h1 class="title">Futureบ้านเรา [ THAI ] - Fact Checklist</h1>
+<p class="subtitle">
+    เครื่องช่วยเช็กความน่าเชื่อถือของ “ข่าว / ข้อความ / โพสต์” ที่คุณเห็นในโลกออนไลน์
+    โดยผูกเข้ากับฐานข้อมูลข่าวที่เชื่อถือได้หลายแห่ง เพื่อเทียบเคียงกับเหตุการณ์จริง ในเวลาปัจจุบัน
+</p>
+
+<div class="shell">
+    <div class="card">
+        <div class="card-inner">
+            <div class="input-label">
+                วางข้อความ / URL ที่ต้องการตรวจสอบ <span>แล้วกดตรวจสอบ</span>
+            </div>
+            <div class="input-wrapper">
+                <input id="inputField" type="text" placeholder="เช่น ลิงก์ข่าว หรือข้อความที่มีคนแชร์ต่อ..." />
+                <button id="clearBtn" class="clear-btn" title="ล้างข้อความ">×</button>
+            </div>
+            <button id="checkBtn" class="check-btn">ตรวจสอบกับฐานข่าวจริง (GDELT)</button>
+
+            <div id="progressBox" class="progress-box">
+                <div class="spin"></div>
+                <div>กำลังดึงข่าวจากฐานข้อมูล GDELT และคำนวณความใกล้เคียง...</div>
+            </div>
+
+            <div class="result-wrapper" id="resultArea"></div>
+        </div>
+    </div>
+</div>
+
+<p class="footer-note">
+    หมายเหตุ: ระบบนี้ไม่ได้ฟันธง 100% ว่า “จริง” หรือ “ปลอม” แต่ช่วยให้เห็นว่าเรื่องที่คุณใส่
+    มีข่าวในโลกจริงที่ใกล้เคียงแค่ไหน จากแหล่งข่าวที่สามารถเชื่อถือได้หลายแห่ง ผู้ใช้ควรใช้วิจารณญาณ
+    และตรวจสอบจากหลายแหล่งร่วมด้วยเสมอ
+</p>
+
+<script>
+/* -----------------------------------------------------
+   FACT CHECK ENGINE (GDELT REAL-TIME + FRONTEND UI)
+----------------------------------------------------- */
+
+const API_ENDPOINT = "http://localhost:8080/api/fact-check-gdelt";
+
+const inputField  = document.getElementById("inputField");
+const clearBtn    = document.getElementById("clearBtn");
+const checkBtn    = document.getElementById("checkBtn");
+const resultArea  = document.getElementById("resultArea");
+const progressBox = document.getElementById("progressBox");
+
+/**
+ * Render result from backend (GDELT-based).
+ * r = {
+ *   score,
+ *   reason,
+ *   matches: [{ title, description, url, source, publishedAt, sim }]
+ * }
+ */
+function renderRemote(r) {
+    const matches = r.matches || [];
+
+    const listHTML = matches.map(a => `
+        <li>
+            <a href="${a.url}" target="_blank" rel="noopener">
+                ${a.title || "(ไม่มีหัวข่าว)"}
+            </a>
+            <div class="report-content">
+                ${(a.source || "GDELT")} • ${a.publishedAt || ""}
+            </div>
+            <div class="report-content">
+                similarity ≈ ${(a.sim * 100).toFixed(1)}%
+            </div>
+            ${
+                a.description
+                    ? `<div class="report-content" style="opacity:.85;margin-top:4px;">${a.description}</div>`
+                    : ""
+            }
+        </li>
+    `).join("");
+
+    const heatWidth = r.score; // ใช้ score เป็น Real Evidence Heat
+
+    resultArea.innerHTML = `
+        <div class="result-card">
+            <div class="badge ${r.score >= 70 ? "good" : (r.score >= 50 ? "warn" : "bad")}">
+                ความน่าเชื่อถือโดยรวม: ${r.score}%
+            </div>
+
+            <div class="detail">${r.reason}</div>
+
+            <div class="score-box">
+                <div class="score-label">Reliability Index (จากข่าวจริง): ${r.score}%</div>
+                <div class="score-bar">
+                    <div class="score-fill" style="width:${r.score}%"></div>
+                </div>
+            </div>
+
+            <div class="heatmap">
+                <div class="heat-item">
+                    <div class="heat-label">Real Evidence Heat</div>
+                    <div class="heat-bar">
+                        <div class="heat-fill" style="width:${heatWidth}%; background:var(--green)"></div>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="report-section">
+                <div class="report-title">ข่าวที่เกี่ยวข้องจากฐานข้อมูลระดับโลก (GDELT):</div>
+                <div class="report-content">
+                    ${
+                        matches.length
+                            ? `<ul>${listHTML}</ul>`
+                            : "<em>ไม่พบข่าวที่เกี่ยวข้องในขณะนี้</em>"
+                    }
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+clearBtn.onclick = () => {
+    inputField.value = "";
+    resultArea.innerHTML = "";
+    inputField.focus();
+};
+
+checkBtn.onclick = async () => {
+    const raw = inputField.value.trim();
+    if (!raw) {
+        resultArea.innerHTML = "<p>กรุณาใส่ข้อความหรือ URL ก่อนตรวจสอบ</p>";
+        return;
+    }
+
+    progressBox.style.display = "flex";
+    resultArea.innerHTML = "";
+
+    try {
+        const res = await fetch(API_ENDPOINT, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ text: raw })
+        });
+
+        const data = await res.json();
+
+        progressBox.style.display = "none";
+
+        if (!data.ok) {
+            resultArea.innerHTML = "<p>ระบบเชื่อมต่อแหล่งข่าวไม่สำเร็จ กรุณาลองใหม่อีกครั้ง</p>";
+            return;
+        }
+
+        renderRemote(data.reliability);
+    } catch (err) {
+        console.error(err);
+        progressBox.style.display = "none";
+        resultArea.innerHTML = "<p>เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์ fact-check</p>";
+    }
+};
+</script>
+
+</body>
+</html>
